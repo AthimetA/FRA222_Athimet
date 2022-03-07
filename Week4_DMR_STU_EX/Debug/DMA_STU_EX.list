@@ -1,5 +1,5 @@
 
-DMA.elf:     file format elf32-littlearm
+DMA_STU_EX.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_line   0000a902  00000000  00000000  0004365b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008dae0  00000000  00000000  0004df5d  2**0
+ 18 .debug_str    0008daf8  00000000  00000000  0004df5d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  000dba3d  2**0
+ 19 .comment      00000053  00000000  00000000  000dba55  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00002144  00000000  00000000  000dba90  2**2
+ 20 .debug_frame  00002144  00000000  00000000  000dbaa8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:

@@ -48,12 +48,10 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint32_t ADCData[4]={0};
-static uint32_t timecount=0 , plauseTime=0 , timeLedOn = 0 , timehall = 0, timetimer2=0;
 static uint32_t humanDelay = 0;
 static GPIO_PinState BSTATE = 0;
-static uint64_t count = 0 ;
-static uint32_t timetimer = 0;
-uint32_t timeStmap = 0;
+static uint32_t timetimer = 0 , timetimer2 = 0;
+uint32_t timeStart = 0,timeStop = 0 ,timeLedOn = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -114,7 +112,8 @@ int main(void)
   {
 	  BSTATE = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 	  timetimer = htim11.Instance->CNT;
-	  timehall = HAL_GetTick();
+	  timetimer = timetimer/10;
+	  timetimer2 = HAL_GetTick();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -358,45 +357,22 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	if(GPIO_Pin == GPIO_PIN_13)
-//	{
-//		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
-//		{
-//			plauseTime = 1000+((22695477*ADCData[0])+ADCData[1])%1000;
-//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-////			timetimer = milsec();
-////			timecount = milsec();
-//			while(timetimer - timecount < plauseTime )
-//			{
-//				timetimer2 = __HAL_TIM_GET_COUNTER(&htim11);
-//				count++;
-//			}
-//			timeLedOn = __HAL_TIM_GET_COUNTER(&htim11);
-//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-//		}
-//		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET && __HAL_TIM_GET_COUNTER(&htim11) - timecount >= plauseTime)
-//		{
-//			humanDelay = htim11.Instance->CNT - timeLedOn;
-//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-//		}
-//	}
-//}
+
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	// Base clock 10000 Hz period 65536 cuz can't use base clock 100000 HZ T^T
 	if (GPIO_Pin == GPIO_PIN_13) {
 		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-			timeStmap = htim11.Instance->CNT;
-			while((htim11.Instance->CNT-timeStmap)<= (1000 + (22695477 * ADCData[0] + ADCData[1]) % 1000)*10){
-			}
-			timeStmap = HAL_GetTick();
+			timeStart = htim11.Instance->CNT;
+			// timeStop need to be in unit 10ms
+			timeStop = (1000 + (22695477 * ADCData[0] + ADCData[1]) % 1000)*10;
+			while((htim11.Instance->CNT-timeStart)<= timeStop){}
+			timeLedOn = HAL_GetTick();
 			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
 		}
 		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) {
-			//HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-			humanDelay = HAL_GetTick() - timeStmap;
+			humanDelay = HAL_GetTick() - timeLedOn;
 		}
 	}
 }

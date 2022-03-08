@@ -1,0 +1,8 @@
+main.c:74:5:main	8	static
+main.c:120:6:SystemClock_Config	88	static
+main.c:165:13:MX_ADC1_Init	24	static
+main.c:215:13:MX_USART2_UART_Init	8	static
+main.c:248:13:MX_GPIO_Init	48	static
+main.c:278:6:ADCConfiginit	4	static
+main.c:293:6:ADCPollingMethodUpdate	16	static
+main.c:320:6:Error_Handler	4	static,ignoring_inline_asm

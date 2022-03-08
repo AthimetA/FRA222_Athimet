@@ -52,8 +52,8 @@ static uint32_t timecount=0 , plauseTime=0 , timeLedOn = 0 , timehall = 0, timet
 static uint32_t humanDelay = 0;
 static GPIO_PinState BSTATE = 0;
 static uint64_t count = 0 ;
-uint64_t _milsec = 0;
-static uint64_t timetimer = 0;
+static uint32_t timetimer = 0;
+uint32_t timeStmap = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,7 +64,6 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM11_Init(void);
 /* USER CODE BEGIN PFP */
-uint64_t milsec();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -106,7 +105,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
  HAL_ADC_Start_DMA(&hadc1, ADCData, 4);
  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
- HAL_TIM_Base_Start_IT(&htim11);
+ HAL_TIM_Base_Start(&htim11);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,8 +113,7 @@ int main(void)
   while (1)
   {
 	  BSTATE = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-	  timetimer = milsec();
-	  timetimer2 = __HAL_TIM_GET_COUNTER(&htim11);
+	  timetimer = htim11.Instance->CNT;
 	  timehall = HAL_GetTick();
     /* USER CODE END WHILE */
 
@@ -258,9 +256,9 @@ static void MX_TIM11_Init(void)
 
   /* USER CODE END TIM11_Init 1 */
   htim11.Instance = TIM11;
-  htim11.Init.Prescaler = 99;
+  htim11.Init.Prescaler = 9999;
   htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim11.Init.Period = 999;
+  htim11.Init.Period = 65535;
   htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim11) != HAL_OK)
@@ -360,41 +358,49 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == GPIO_PIN_13)
-	{
-		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
-		{
-			plauseTime = 1000+((22695477*ADCData[0])+ADCData[1])%1000;
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+//	if(GPIO_Pin == GPIO_PIN_13)
+//	{
+//		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
+//		{
+//			plauseTime = 1000+((22695477*ADCData[0])+ADCData[1])%1000;
+//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+////			timetimer = milsec();
+////			timecount = milsec();
+//			while(timetimer - timecount < plauseTime )
+//			{
+//				timetimer2 = __HAL_TIM_GET_COUNTER(&htim11);
+//				count++;
+//			}
+//			timeLedOn = __HAL_TIM_GET_COUNTER(&htim11);
+//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+//		}
+//		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET && __HAL_TIM_GET_COUNTER(&htim11) - timecount >= plauseTime)
+//		{
+//			humanDelay = htim11.Instance->CNT - timeLedOn;
+//			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+//		}
+//	}
+//}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if (GPIO_Pin == GPIO_PIN_13) {
+		if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-			timetimer = milsec();
-			timecount = milsec();
-			while(timetimer - timecount < plauseTime )
-			{
-				timetimer = milsec();
-				count++;
+			timeStmap = htim11.Instance->CNT;
+			while((htim11.Instance->CNT-timeStmap)<= (1000 + (22695477 * ADCData[0] + ADCData[1]) % 1000)*10){
 			}
-			timeLedOn = milsec();
+			timeStmap = HAL_GetTick();
 			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
 		}
-		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET && milsec() - timecount >= plauseTime)
-		{
-			humanDelay = milsec() - timeLedOn;
-			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+		else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) {
+			//HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+			humanDelay = HAL_GetTick() - timeStmap;
 		}
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	if (htim == &htim11) {
-		_milsec++;
-	}
-}
-
-uint64_t milsec(){
-	return _milsec;
-}
 /* USER CODE END 4 */
 
 /**

@@ -60,8 +60,8 @@ all: main-build
 main-build: DMA.elf secondary-outputs
 
 # Tool invocations
-DMA.elf: $(OBJS) $(USER_OBJS) E:\FRA222\git\DMA\DMA\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "DMA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\FRA222\git\DMA\DMA\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DMA.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DMA.elf: $(OBJS) $(USER_OBJS) E:\FRA222\git\FRA222_Athimet\Week4_DMR_STU_EX\DMA\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "DMA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\FRA222\git\FRA222_Athimet\Week4_DMR_STU_EX\DMA\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DMA.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

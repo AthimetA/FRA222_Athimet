@@ -60,8 +60,8 @@ all: main-build
 main-build: GPIO.elf secondary-outputs
 
 # Tool invocations
-GPIO.elf: $(OBJS) $(USER_OBJS) E:\FRA222\git\GPIO\STM32\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "GPIO.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\FRA222\git\GPIO\STM32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="GPIO.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+GPIO.elf: $(OBJS) $(USER_OBJS) E:\FRA222\git\FRA222_Athimet\Week1_GPIO_STU\STM32\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "GPIO.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\FRA222\git\FRA222_Athimet\Week1_GPIO_STU\STM32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="GPIO.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

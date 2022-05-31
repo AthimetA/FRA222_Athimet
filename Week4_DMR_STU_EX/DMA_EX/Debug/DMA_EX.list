@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0000cc0a  00000000  00000000  0002003c  2**0
+ 12 .debug_info   0000cc5e  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001abb  00000000  00000000  0002cc46  2**0
+ 13 .debug_abbrev 00001ad0  00000000  00000000  0002cc9a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000ba0  00000000  00000000  0002e708  2**3
+ 14 .debug_aranges 00000ba0  00000000  00000000  0002e770  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000b08  00000000  00000000  0002f2a8  2**3
+ 15 .debug_ranges 00000b08  00000000  00000000  0002f310  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000168fc  00000000  00000000  0002fdb0  2**0
+ 16 .debug_macro  00016928  00000000  00000000  0002fe18  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000d116  00000000  00000000  000466ac  2**0
+ 17 .debug_line   0000d10f  00000000  00000000  00046740  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000957c4  00000000  00000000  000537c2  2**0
+ 18 .debug_str    00095933  00000000  00000000  0005384f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000e8f86  2**0
+ 19 .comment      00000050  00000000  00000000  000e9182  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00003104  00000000  00000000  000e8fd8  2**2
+ 20 .debug_frame  00003104  00000000  00000000  000e91d4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -500,6 +500,7 @@ void SystemClock_Config(void)
  80005c8:	f403 4340 	and.w	r3, r3, #49152	; 0xc000
  80005cc:	607b      	str	r3, [r7, #4]
  80005ce:	687b      	ldr	r3, [r7, #4]
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -541,6 +542,7 @@ void SystemClock_Config(void)
     Error_Handler();
  8000604:	f000 f9f4 	bl	80009f0 <Error_Handler>
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -602,9 +604,9 @@ static void MX_ADC1_Init(void)
  8000650:	605a      	str	r2, [r3, #4]
  8000652:	609a      	str	r2, [r3, #8]
  8000654:	60da      	str	r2, [r3, #12]
-  /* USER CODE BEGIN ADC1_Init 1 */
 
   /* USER CODE END ADC1_Init 1 */
+
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
@@ -665,6 +667,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
  80006b0:	f000 f99e 	bl	80009f0 <Error_Handler>
   }
+
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = ADC_CHANNEL_0;
@@ -688,6 +691,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
  80006d0:	f000 f98e 	bl	80009f0 <Error_Handler>
   }
+
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = ADC_CHANNEL_1;
@@ -708,6 +712,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
  80006ec:	f000 f980 	bl	80009f0 <Error_Handler>
   }
+
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
@@ -728,6 +733,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
  8000708:	f000 f972 	bl	80009f0 <Error_Handler>
   }
+
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = ADC_CHANNEL_VREFINT;
@@ -5579,10 +5585,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002108:	69ba      	ldr	r2, [r7, #24]
  800210a:	f841 2023 	str.w	r2, [r1, r3, lsl #2]
 
-        /* Clear EXTI line configuration */
-        temp = EXTI->IMR;
+        /* Clear Rising Falling edge configuration */
+        temp = EXTI->RTSR;
  800210e:	4b38      	ldr	r3, [pc, #224]	; (80021f0 <HAL_GPIO_Init+0x304>)
- 8002110:	681b      	ldr	r3, [r3, #0]
+ 8002110:	689b      	ldr	r3, [r3, #8]
  8002112:	61bb      	str	r3, [r7, #24]
         temp &= ~((uint32_t)iocurrent);
  8002114:	693b      	ldr	r3, [r7, #16]
@@ -5590,10 +5596,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002118:	69ba      	ldr	r2, [r7, #24]
  800211a:	4013      	ands	r3, r2
  800211c:	61bb      	str	r3, [r7, #24]
-        if((GPIO_Init->Mode & EXTI_IT) != 0x00U)
+        if((GPIO_Init->Mode & TRIGGER_RISING) != 0x00U)
  800211e:	683b      	ldr	r3, [r7, #0]
  8002120:	685b      	ldr	r3, [r3, #4]
- 8002122:	f403 3380 	and.w	r3, r3, #65536	; 0x10000
+ 8002122:	f403 1380 	and.w	r3, r3, #1048576	; 0x100000
  8002126:	2b00      	cmp	r3, #0
  8002128:	d003      	beq.n	8002132 <HAL_GPIO_Init+0x246>
         {
@@ -5603,14 +5609,14 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  800212e:	4313      	orrs	r3, r2
  8002130:	61bb      	str	r3, [r7, #24]
         }
-        EXTI->IMR = temp;
+        EXTI->RTSR = temp;
  8002132:	4a2f      	ldr	r2, [pc, #188]	; (80021f0 <HAL_GPIO_Init+0x304>)
  8002134:	69bb      	ldr	r3, [r7, #24]
- 8002136:	6013      	str	r3, [r2, #0]
+ 8002136:	6093      	str	r3, [r2, #8]
 
-        temp = EXTI->EMR;
+        temp = EXTI->FTSR;
  8002138:	4b2d      	ldr	r3, [pc, #180]	; (80021f0 <HAL_GPIO_Init+0x304>)
- 800213a:	685b      	ldr	r3, [r3, #4]
+ 800213a:	68db      	ldr	r3, [r3, #12]
  800213c:	61bb      	str	r3, [r7, #24]
         temp &= ~((uint32_t)iocurrent);
  800213e:	693b      	ldr	r3, [r7, #16]
@@ -5618,10 +5624,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002142:	69ba      	ldr	r2, [r7, #24]
  8002144:	4013      	ands	r3, r2
  8002146:	61bb      	str	r3, [r7, #24]
-        if((GPIO_Init->Mode & EXTI_EVT) != 0x00U)
+        if((GPIO_Init->Mode & TRIGGER_FALLING) != 0x00U)
  8002148:	683b      	ldr	r3, [r7, #0]
  800214a:	685b      	ldr	r3, [r3, #4]
- 800214c:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
+ 800214c:	f403 1300 	and.w	r3, r3, #2097152	; 0x200000
  8002150:	2b00      	cmp	r3, #0
  8002152:	d003      	beq.n	800215c <HAL_GPIO_Init+0x270>
         {
@@ -5631,15 +5637,14 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002158:	4313      	orrs	r3, r2
  800215a:	61bb      	str	r3, [r7, #24]
         }
-        EXTI->EMR = temp;
+        EXTI->FTSR = temp;
  800215c:	4a24      	ldr	r2, [pc, #144]	; (80021f0 <HAL_GPIO_Init+0x304>)
  800215e:	69bb      	ldr	r3, [r7, #24]
- 8002160:	6053      	str	r3, [r2, #4]
+ 8002160:	60d3      	str	r3, [r2, #12]
 
-        /* Clear Rising Falling edge configuration */
-        temp = EXTI->RTSR;
+        temp = EXTI->EMR;
  8002162:	4b23      	ldr	r3, [pc, #140]	; (80021f0 <HAL_GPIO_Init+0x304>)
- 8002164:	689b      	ldr	r3, [r3, #8]
+ 8002164:	685b      	ldr	r3, [r3, #4]
  8002166:	61bb      	str	r3, [r7, #24]
         temp &= ~((uint32_t)iocurrent);
  8002168:	693b      	ldr	r3, [r7, #16]
@@ -5647,10 +5652,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  800216c:	69ba      	ldr	r2, [r7, #24]
  800216e:	4013      	ands	r3, r2
  8002170:	61bb      	str	r3, [r7, #24]
-        if((GPIO_Init->Mode & TRIGGER_RISING) != 0x00U)
+        if((GPIO_Init->Mode & EXTI_EVT) != 0x00U)
  8002172:	683b      	ldr	r3, [r7, #0]
  8002174:	685b      	ldr	r3, [r3, #4]
- 8002176:	f403 1380 	and.w	r3, r3, #1048576	; 0x100000
+ 8002176:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
  800217a:	2b00      	cmp	r3, #0
  800217c:	d003      	beq.n	8002186 <HAL_GPIO_Init+0x29a>
         {
@@ -5660,14 +5665,15 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002182:	4313      	orrs	r3, r2
  8002184:	61bb      	str	r3, [r7, #24]
         }
-        EXTI->RTSR = temp;
+        EXTI->EMR = temp;
  8002186:	4a1a      	ldr	r2, [pc, #104]	; (80021f0 <HAL_GPIO_Init+0x304>)
  8002188:	69bb      	ldr	r3, [r7, #24]
- 800218a:	6093      	str	r3, [r2, #8]
+ 800218a:	6053      	str	r3, [r2, #4]
 
-        temp = EXTI->FTSR;
+        /* Clear EXTI line configuration */
+        temp = EXTI->IMR;
  800218c:	4b18      	ldr	r3, [pc, #96]	; (80021f0 <HAL_GPIO_Init+0x304>)
- 800218e:	68db      	ldr	r3, [r3, #12]
+ 800218e:	681b      	ldr	r3, [r3, #0]
  8002190:	61bb      	str	r3, [r7, #24]
         temp &= ~((uint32_t)iocurrent);
  8002192:	693b      	ldr	r3, [r7, #16]
@@ -5675,10 +5681,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8002196:	69ba      	ldr	r2, [r7, #24]
  8002198:	4013      	ands	r3, r2
  800219a:	61bb      	str	r3, [r7, #24]
-        if((GPIO_Init->Mode & TRIGGER_FALLING) != 0x00U)
+        if((GPIO_Init->Mode & EXTI_IT) != 0x00U)
  800219c:	683b      	ldr	r3, [r7, #0]
  800219e:	685b      	ldr	r3, [r3, #4]
- 80021a0:	f403 1300 	and.w	r3, r3, #2097152	; 0x200000
+ 80021a0:	f403 3380 	and.w	r3, r3, #65536	; 0x10000
  80021a4:	2b00      	cmp	r3, #0
  80021a6:	d003      	beq.n	80021b0 <HAL_GPIO_Init+0x2c4>
         {
@@ -5688,10 +5694,10 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  80021ac:	4313      	orrs	r3, r2
  80021ae:	61bb      	str	r3, [r7, #24]
         }
-        EXTI->FTSR = temp;
+        EXTI->IMR = temp;
  80021b0:	4a0f      	ldr	r2, [pc, #60]	; (80021f0 <HAL_GPIO_Init+0x304>)
  80021b2:	69bb      	ldr	r3, [r7, #24]
- 80021b4:	60d3      	str	r3, [r2, #12]
+ 80021b4:	6013      	str	r3, [r2, #0]
   for(position = 0U; position < GPIO_NUMBER; position++)
  80021b6:	69fb      	ldr	r3, [r7, #28]
  80021b8:	3301      	adds	r3, #1
